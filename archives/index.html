@@ -63,6 +63,141 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-vsftpd-with-samba" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/11/vsftpd-with-samba/" class="article-date">
+  <time datetime="2015-03-11T07:22:37.000Z" itemprop="datePublished">Mar 11 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/11/vsftpd-with-samba/">vsftpd with samba on debian</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Purpose">Purpose</h2>
+<p>The target machine is <code>172.178.8.8</code>, with Debian installed, and has Internet connection.</p>
+<p>We need to set up a ftp, where</p>
+<ul>
+<li>FTP ROOT DIR, i.e., <code>/temp/dataroot/ftproot</code></li>
+<li>PARENT DIR OF FTP ROOT DIR, i.e., <code>/temp/dataroot</code>, should be SAMBA shared</li>
+<li>Anonymous login is NOT allowed</li>
+<li>Both ftp and samba users need read and write priviledges</li>
+</ul>
+<h2 id="Use_root_mode">Use root mode</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> su</div></pre></td></tr></table></figure>
+
+<h2 id="FTP_usergroup_and_user">FTP usergroup and user</h2>
+<h3 id="Add_FTP_usergroup">Add FTP usergroup</h3>
+<p>Let’s say, it is <code>ftpadmin</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">groupadd ftpadmin</div></pre></td></tr></table></figure>
+
+<h3 id="Make_custom_home_dir_for_user_with_FTP_priviledges">Make custom home dir for user with FTP priviledges</h3>
+<p>We cannot use the default <code>/home/&lt;username&gt;</code> as home dir, because it seems not appropriate to SAMBA share <code>/home</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir /temp</div><div class="line">mkdir /temp/dataroot</div><div class="line">mkdir /temp/dataroot/ftproot</div></pre></td></tr></table></figure>
+
+
+<h3 id="Add_FTP_user">Add FTP user</h3>
+<p>i.e., <code>ftpuser</code>, and specify usergroup and home directory</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd -G ftpadmin <span class="operator">-d</span> /temp/dataroot/ftproot -M ftpuser</div></pre></td></tr></table></figure>
+
+<h3 id="Add_FTP_user_password">Add FTP user password</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">passwd ftpuser</div><div class="line">*&lt;enter the password&gt;*</div></pre></td></tr></table></figure>
+
+
+
+<h3 id="Grant_FTP_user_priviledges">Grant FTP user priviledges</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">chown ftpuser:ftpadmin /temp/dataroot</div><div class="line">chmod <span class="number">775</span> /temp/dataroot</div><div class="line"></div><div class="line">chown ftpuser:ftpadmin /temp/dataroot/ftproot</div><div class="line">chmod <span class="number">775</span> /temp/dataroot/ftproot</div></pre></td></tr></table></figure>
+
+<h2 id="FTP">FTP</h2>
+<h3 id="Install_vsftpd">Install vsftpd</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">apt-get install update</div><div class="line">apt-get install vsftpd</div></pre></td></tr></table></figure>
+
+<h3 id="Upgrade_vsftpd_to_3-0_to_allow_writeable_chroot">Upgrade vsftpd to 3.0 to allow writeable chroot</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">echo</span> <span class="string">"deb http://ftp.us.debian.org/debian jessie main contrib non-free"</span> &gt;&gt; /etc/apt/sources.<span class="keyword">list</span></div><div class="line">aptitude <span class="keyword">update</span></div><div class="line">aptitude upgrade vsftpd</div></pre></td></tr></table></figure>
+
+<h3 id="Config_vsftpd_to_allow_writeable_chroot">Config vsftpd to allow writeable chroot</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">echo</span> <span class="string">"allow_writeable_chroot=YES"</span> &gt;&gt; /etc/vsftpd.<span class="keyword">conf</span></div></pre></td></tr></table></figure>
+
+<h3 id="Config_vsftpd_to_enable_write">Config vsftpd to enable write</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">vi</span> /etc/vsftpd.<span class="keyword">conf</span></div></pre></td></tr></table></figure>
+
+
+<p>Make sure to uncomment the lines</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="setting">write_enable=<span class="value"><span class="keyword">YES</span></span></span></div><div class="line"><span class="setting">chroot_local_user=<span class="value"><span class="keyword">YES</span></span></span></div></pre></td></tr></table></figure>
+
+
+<p>Make sure to disallow anonymous log in</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="setting">anonymous_enable=<span class="value"><span class="keyword">NO</span></span></span></div></pre></td></tr></table></figure>
+
+<p>Make sure to comment the lines</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#chroot_list_enable=YES</span></div><div class="line"><span class="preprocessor">#chroot_list_file=/etc/vsftpd.chroot_list</span></div></pre></td></tr></table></figure>
+
+<h3 id="Restart_vsftpd">Restart vsftpd</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">service</span> <span class="title">vsftpd</span> restart</span></div></pre></td></tr></table></figure>
+
+<h3 id="VERIFY_by_Windows_command_line">VERIFY by Windows command line</h3>
+<p>In command line, type    <code>ftp</code></p>
+<p>Then after ftp&gt; prompt, first type <code>open 172.178.8.8</code></p>
+<p>Then type username (in this case, ftpuser)</p>
+<p>Then type password</p>
+<p>You should successfully log in</p>
+<h3 id="VERIFY_by_FTP_Client,_such_as_LeapFTP">VERIFY by FTP Client, such as LeapFTP</h3>
+<p>Connect to <code>172.178.8.8</code></p>
+<p>When logged in, make sure you can make a new dir in root dir</p>
+<h3 id="VERIFY_by_IE">VERIFY by IE</h3>
+<p>In IE address field, open <code>ftp://172.178.8.8</code></p>
+<p>After entering ftp user and password, you should see the dir you just added in FTP Client</p>
+<h2 id="SAMBA">SAMBA</h2>
+<h3 id="Install_SAMBA">Install SAMBA</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-<span class="keyword">get</span> install samba</div></pre></td></tr></table></figure>
+
+<h3 id="Add_SAMBA_user">Add SAMBA user</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">smbpasswd <span class="operator">-a</span> ftpuser</div><div class="line">*&lt;Then <span class="built_in">type</span> <span class="keyword">in</span> the same user password <span class="keyword">for</span> simplicity&gt;*</div></pre></td></tr></table></figure>
+
+<h3 id="Config_SAMBA">Config SAMBA</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">vi</span> /etc/samba/smb.<span class="keyword">conf</span></div></pre></td></tr></table></figure>
+
+<h3 id="Share_parent_dir_of_ftp_root_dir">Share parent dir of ftp root dir</h3>
+<p>Add the following to smb.conf    </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[dataroot]</div><div class="line"><span class="variable">path =</span> /temp/dataroot</div><div class="line">valid <span class="variable">users =</span> ftpuser</div><div class="line"><span class="variable">public =</span> no</div><div class="line"><span class="variable">writable =</span> yes</div><div class="line">read <span class="variable">only =</span> no</div></pre></td></tr></table></figure>
+
+<h3 id="Restart_SAMBA">Restart SAMBA</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/etc/<span class="keyword">init</span>.d/samba restart</div></pre></td></tr></table></figure>
+
+<h3 id="VERIFY">VERIFY</h3>
+<p>On Windows, connect to SAMBA dir, using</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">net use Z: <span class="command">\\</span>172.178.8.8<span class="command">\dataroot</span> mypassword /USER:ftpuser</div></pre></td></tr></table></figure>
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/03/11/vsftpd-with-samba/" data-id="cmrehqar9u1azndd" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/samba/">samba</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vsftpd/">vsftpd</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-How-did-I-set-up-this-blog-on-GitHub-using-Hexo" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/02/16/How-did-I-set-up-this-blog-on-GitHub-using-Hexo/" class="article-date">
@@ -215,7 +350,7 @@ hexo s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/16/How-did-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="n2kbck9xsxvbbzcr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/16/How-did-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="g1248olb4db22gu4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
@@ -263,7 +398,7 @@ hexo s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="fdtbo7hu67h99hg1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="1dtfbo0uywcq86dr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li></ul>
@@ -319,9 +454,106 @@ hexo s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/16/hello-world/" data-id="hajoj8kxlm10c5qv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/16/hello-world/" data-id="8e8anhfzw80edl95" class="article-share-link">Share</a>
       
       
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-README" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/11/README/" class="article-date">
+  <time datetime="2015-01-11T07:22:37.000Z" itemprop="datePublished">Jan 11 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/11/README/">HEXO Landscape Theme Readme</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Landscape">Landscape</h1>
+<p>A brand new default theme for <a href="http://zespia.tw/hexo/" target="_blank" rel="external">Hexo</a>.</p>
+<ul>
+<li><a href="http://hexo.io/hexo-theme-landscape/" target="_blank" rel="external">Preview</a></li>
+</ul>
+<h2 id="Installation">Installation</h2>
+<h3 id="Install">Install</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git clone https://github.com/hexojs/hexo-theme-landscape.git themes/landscape</div></pre></td></tr></table></figure>
+
+<p><strong>Landscape requires Hexo 2.4 and above.</strong></p>
+<h3 id="Enable">Enable</h3>
+<p>Modify <code>theme</code> setting in <code>_config.yml</code> to <code>landscape</code>.</p>
+<h3 id="Update">Update</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> themes/landscape</div><div class="line">git pull</div></pre></td></tr></table></figure>
+
+<h2 id="Configuration">Configuration</h2>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># Header</span></div><div class="line"><span class="label">menu:</span></div><div class="line">  Home: /</div><div class="line">  Archives: /archives</div><div class="line"><span class="label">rss:</span> /atom.xml</div><div class="line"></div><div class="line"><span class="preprocessor"># Content</span></div><div class="line"><span class="label">excerpt_link:</span> Read More</div><div class="line"><span class="label">fancybox:</span> true</div><div class="line"></div><div class="line"><span class="preprocessor"># Sidebar</span></div><div class="line"><span class="label">sidebar:</span> right</div><div class="line"><span class="label">widgets:</span></div><div class="line">- category</div><div class="line">- tag</div><div class="line">- tagcloud</div><div class="line">- archives</div><div class="line">- recent_posts</div><div class="line"></div><div class="line"><span class="preprocessor"># Miscellaneous</span></div><div class="line"><span class="label">google_analytics:</span></div><div class="line"><span class="label">favicon:</span> /favicon.png</div><div class="line"><span class="label">twitter:</span></div><div class="line"><span class="label">google_plus:</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>menu</strong> - Navigation menu</li>
+<li><strong>rss</strong> - RSS link</li>
+<li><strong>excerpt_link</strong> - “Read More” link at the bottom of excerpted articles. <code>false</code> to hide the link.</li>
+<li><strong>fancybox</strong> - Enable <a href="http://fancyapps.com/fancybox/" target="_blank" rel="external">Fancybox</a></li>
+<li><strong>sidebar</strong> - Sidebar style. You can choose <code>left</code>, <code>right</code>, <code>bottom</code> or <code>false</code>.</li>
+<li><strong>widgets</strong> - Widgets displaying in sidebar</li>
+<li><strong>google_analytics</strong> - Google Analytics ID</li>
+<li><strong>favicon</strong> - Favicon path</li>
+<li><strong>twitter</strong> - Twiiter ID</li>
+<li><strong>google_plus</strong> - Google+ ID</li>
+</ul>
+<h2 id="Features">Features</h2>
+<h3 id="Fancybox">Fancybox</h3>
+<p>Landscape uses <a href="http://fancyapps.com/fancybox/" target="_blank" rel="external">Fancybox</a> to showcase your photos. You can use Markdown syntax or fancybox tag plugin to add your photos.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">![<span class="link_label">img caption</span>](<span class="link_url">img url</span>)</div><div class="line"></div><div class="line"><span class="xml"><span class="tag">&lt;<span class="title">hexoescape</span>&gt;</span></span>0<span class="xml"><span class="tag">&lt;/<span class="title">hexoescape</span>&gt;</span></span></div></pre></td></tr></table></figure>
+
+<h3 id="Sidebar">Sidebar</h3>
+<p>You can put your sidebar in left side, right side or bottom of your site by editing <code>sidebar</code> setting.</p>
+<p>Landscape provides 5 built-in widgets:</p>
+<ul>
+<li>category</li>
+<li>tag</li>
+<li>tagcloud</li>
+<li>archives</li>
+<li>recent_posts</li>
+</ul>
+<p>All of them are enabled by default. You can edit them in <code>widget</code> setting.</p>
+<h2 id="Development">Development</h2>
+<h3 id="Requirements">Requirements</h3>
+<ul>
+<li><a href="http://gruntjs.com/" target="_blank" rel="external">Grunt</a> 0.4+</li>
+<li>Hexo 2.4+</li>
+</ul>
+<h3 id="Grunt_tasks">Grunt tasks</h3>
+<ul>
+<li><strong>default</strong> - Download <a href="http://fancyapps.com/fancybox/" target="_blank" rel="external">Fancybox</a> and <a href="http://fontawesome.io/" target="_blank" rel="external">Font Awesome</a>.</li>
+<li><strong>fontawesome</strong> - Only download <a href="http://fontawesome.io/" target="_blank" rel="external">Font Awesome</a>.</li>
+<li><strong>fancybox</strong> - Only download <a href="http://fancyapps.com/fancybox/" target="_blank" rel="external">Fancybox</a>.</li>
+<li><strong>clean</strong> - Clean temporarily files and downloaded files.</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/01/11/README/" data-id="xf6zriywmsxpd3t9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Landscape/">Landscape</a></li></ul>
+
     </footer>
   </div>
   
@@ -347,7 +579,7 @@ hexo s
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Landscape/">Landscape</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/samba/">samba</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vsftpd/">vsftpd</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -356,7 +588,7 @@ hexo s
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/GitHub/" style="font-size: NaNpx;">GitHub</a><a href="/tags/Hexo/" style="font-size: NaNpx;">Hexo</a><a href="/tags/blog/" style="font-size: NaNpx;">blog</a>
+      <a href="/tags/GitHub/" style="font-size: 10.00px;">GitHub</a><a href="/tags/Hexo/" style="font-size: 20.00px;">Hexo</a><a href="/tags/Landscape/" style="font-size: 10.00px;">Landscape</a><a href="/tags/blog/" style="font-size: 10.00px;">blog</a><a href="/tags/samba/" style="font-size: 10.00px;">samba</a><a href="/tags/vsftpd/" style="font-size: 10.00px;">vsftpd</a>
     </div>
   </div>
 
@@ -365,7 +597,7 @@ hexo s
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">3</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -377,6 +609,10 @@ hexo s
       <ul>
         
           <li>
+            <a href="/2015/03/11/vsftpd-with-samba/">vsftpd with samba on debian</a>
+          </li>
+        
+          <li>
             <a href="/2015/02/16/How-did-I-set-up-this-blog-on-GitHub-using-Hexo/">How did I set up this blog on GitHub using Hexo</a>
           </li>
         
@@ -386,6 +622,10 @@ hexo s
         
           <li>
             <a href="/2015/02/16/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/11/README/">HEXO Landscape Theme Readme</a>
           </li>
         
       </ul>
