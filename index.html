@@ -63,6 +63,133 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-learn-Selenium-WebDriver-Part-I" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/18/learn-Selenium-WebDriver-Part-I/" class="article-date">
+  <time datetime="2015-03-18T05:48:02.000Z" itemprop="datePublished">Mar 18 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/18/learn-Selenium-WebDriver-Part-I/">Learn Selenium WebDriver Part I</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>I am learning this with Java, Firefox, Eclipse on Windows 7.</p>
+<p>Today I started to learn <a href="http://docs.seleniumhq.org/docs/03_webdriver.jsp" target="_blank" rel="external">Selenium Web Driver API</a></p>
+<p>(Note: readers in China, this is outside the wall)    </p>
+<p>I wanted to use Selenium Java Firefox Web Driver in an Eclipse project on Windows 7.</p>
+<p>Here I met with a couple of issues with the part “Setting Up a Selenium-WebDriver Project”.</p>
+<p>But fortunately, I finally solved them and successfully ran the first simple example.</p>
+<h4 id="Set_up_the_dev_environment">Set up the dev environment</h4>
+<p>Before you start, make sure that the following are properly installed:</p>
+<ul>
+<li>Java 1.7.0_45 x64</li>
+<li>Eclipse    Version: Kepler Service Release 2</li>
+<li>Apache Maven 3.2.1 </li>
+<li>m2e (Maven Integration for Eclipse) 1.5.1 (Note: readers in China, this seems to be outside the wall)</li>
+</ul>
+<h4 id="Install_Maven_dependency_libraries">Install Maven dependency libraries</h4>
+<p>(1) Create a temp folder, </p>
+<pre><code>D:<span class="command">\mySVN</span><span class="command">\Selenium</span><span class="command">\Temp</span>1
+</code></pre><p>I will refer to it as <code>%TEMP1%</code>.</p>
+<p>(2)    Under <code>%TEMP1%</code>, create</p>
+<pre><code>pom<span class="built_in">.</span><span class="built_in">xml</span>
+</code></pre><p>(3) Copy the pom settings in the tutorial into <code>pom.xml</code>.</p>
+<p>(4) From a command-line, CD into <code>%TEMP1%</code> directory and run maven as follows.</p>
+<pre><code>mvn clean <span class="operator"><span class="keyword">install</span></span>
+</code></pre><p>This will download all dependencies in your maven M2 REPO directory.    </p>
+<h4 id="Generate_an_empty_Eclipse_project">Generate an empty Eclipse project</h4>
+<p>(1) Create another temp folder</p>
+<pre><code>D:<span class="command">\mySVN</span><span class="command">\Selenium</span><span class="command">\Temp</span>2
+</code></pre><p>I will refer to it as <code>%TEMP2%</code>.</p>
+<p>(2)    From a command-line, CD into <code>%TEMP2%</code> directory and run maven as follows.</p>
+<pre><code><span class="tag">mvn</span> <span class="tag">eclipse</span><span class="pseudo">:eclipse</span>
+</code></pre><p>This will make an empty Eclipse project.</p>
+<h4 id="Import">Import</h4>
+<p>(1) Create the workspace dir</p>
+<pre><code>D:<span class="command">\mySVN</span><span class="command">\Selenium</span><span class="command">\WebDriverExample</span>
+</code></pre><p>I will refer to it as <code>%EXAMPLE_BASE%</code></p>
+<p>(2)    Open Eclipse, and open workspace in <code>%EXAMPLE_BASE%</code></p>
+<p>(3) Import the empty project into workspace by copy files</p>
+<p>File - Import - Existing Project - browse to <code>%TEMP2%</code> - make sure to check “copy file “</p>
+<p>Then, you got a dir</p>
+<pre><code>D:<span class="command">\mySVN</span><span class="command">\Selenium</span><span class="command">\WebDriverExample</span><span class="command">\MySel</span>20Proj
+</code></pre><p>I will refer to it as <code>%EXAMPLE_PRJ%</code></p>
+<h4 id="The_Question:_How_to_Continue">The Question:　How to Continue</h4>
+<p>After this, there is no instruction. So I was in dark.</p>
+<p>Compilation was ok. But I have no clue how to continue.</p>
+<p>Since I got stuck, I decided to search for answers.</p>
+<p>During search, I tried two other tutorials.</p>
+<h4 id="Other_Tutorials:_Advanced_Selenium">Other Tutorials: Advanced Selenium</h4>
+<p>The first is an advanced real tutorial</p>
+<p><a href="http://www.toolsqa.com/java/maven/configure-selenium-continuous-integration-maven/" target="_blank" rel="external">Configure Selenium Continuous Integration with Maven</a></p>
+<p>It worked perfectly. But it is a bit complicated for me now.</p>
+<h4 id="Other_Tutorials:_Maven_Tutorial">Other Tutorials: Maven Tutorial</h4>
+<p>I quickly went over the first chapters of </p>
+<p><a href="http://books.sonatype.com/mvnref-book/reference/index.html" target="_blank" rel="external">Maven: The Complete Reference</a></p>
+<p>Then, I tried the most simple maven helloworld.</p>
+<p>It also worked.</p>
+<p>I learnt a few important relevant points:</p>
+<ul>
+<li><p>Maven works around default conventions, including project dir structures and lifecyles.</p>
+</li>
+<li><p>If you follow the conventions, you don’t need to do much.</p>
+</li>
+<li><p>If you deviate, you still can do, but need much work.</p>
+</li>
+</ul>
+<h4 id="Finally,_I_got_the_idea_about_how_to_configure_the_project-">Finally, I got the idea about how to configure the project.</h4>
+<p>(1)    Convert the project <code>MySel20Proj</code> to Maven project</p>
+<p>In Eclipse package explorer, right click “MySel20Proj” -&gt; Configure -&gt; convert to Maven project</p>
+<p>(2)    Create default Maven dir structure according to package info (org.openqa.selenium.example) of the example class <code>Selenium2Example</code></p>
+<p>From a command-line, CD into <code>%EXAMPLE_PRJ%</code> directory and run cmd as follows.</p>
+<pre><code>mkdir src<span class="command">\main</span><span class="command">\java</span><span class="command">\org</span><span class="command">\openqa</span><span class="command">\selenium</span><span class="command">\example</span>
+mkdir src<span class="command">\test</span><span class="command">\java</span><span class="command">\org</span><span class="command">\openqa</span><span class="command">\selenium</span><span class="command">\example</span>
+</code></pre><p>(3) Add class <code>Selenium2Example</code></p>
+<p>Then in Eclipse package explorer, under src/main/java, right click package <code>org.openqa.selenium.example</code>, add a new class <code>Selenium2Example</code>.</p>
+<p>Then copy the code from the example into it.</p>
+<p>(4) Add a dummy JUNIT Test</p>
+<p>Then in Eclipse package explorer, under src/test/java, right click package <code>org.openqa.selenium.example</code>, add a new JUNIT (let’s say, <code>MyTest.java</code>).</p>
+<p>Just leave the default implementation intact.</p>
+<h4 id="Make_sure_that_in_Eclipse_package_explorer,_you_see_no_error-">Make sure that in Eclipse package explorer, you see no error.</h4>
+<h4 id="Click_“Run_As_…”_button_in_the_toolbar-">Click “Run As …” button in the toolbar.</h4>
+<p>On your first run, you need to type classname “Selenium2Example” (typing an “S” will show it) as an argument to jar command.</p>
+<p>Now there is an exception: <code>unable to find firefox binary in PATH env variable</code>.</p>
+<p>Add firefox.exe path to machine PATH env variable.</p>
+<h4 id="Again_run_the_application">Again run the application</h4>
+<p>You should see that Firefox opens. When google shows up, “Cheese!” is typed in. </p>
+<p>It runs and closes very quickly, before you can see the result page clearly.</p>
+<p>But you will see messages in the console window.</p>
+<hr>
+<p>Notes for readers in China</p>
+<p>As you know, google is outside the wall. So please change the url in the example to baidu, and change element id or name accordingly.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/03/18/learn-Selenium-WebDriver-Part-I/" data-id="i74plwwcegub37bu" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Eclipse/">Eclipse</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Selenium/">Selenium</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebDriver/">WebDriver</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-learn-Selenium-IDE" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/03/17/learn-Selenium-IDE/" class="article-date">
@@ -155,7 +282,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/17/learn-Selenium-IDE/" data-id="61lnbb2oitg8m88j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/17/learn-Selenium-IDE/" data-id="zzrsy4lmvoelipnj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -288,7 +415,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/03/11/vsftpd-with-samba/" data-id="i9ldycwgc63s541c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/11/vsftpd-with-samba/" data-id="ciohhy5ebmx354h4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/samba/">samba</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vsftpd/">vsftpd</a></li></ul>
@@ -452,7 +579,7 @@ hexo s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/16/How-did-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="3fil7w9wqtdac2r5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/16/How-did-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="nejn5udjisqn9x6d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
@@ -500,7 +627,7 @@ hexo s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="oeayyvpattasqj6s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="bltrpm5gozwfyo0z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li></ul>
@@ -556,7 +683,7 @@ hexo s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/16/hello-world/" data-id="gx65ozmctqm5aqm6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/02/16/hello-world/" data-id="fuu6mhn38anlwj8o" class="article-share-link">Share</a>
       
       
     </footer>
@@ -651,7 +778,7 @@ hexo s
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/01/11/README/" data-id="yxfq2u85msbpakfg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/01/11/README/" data-id="rbb8wyf2rwb9mr9t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Landscape/">Landscape</a></li></ul>
@@ -681,7 +808,7 @@ hexo s
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Landscape/">Landscape</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/samba/">samba</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vsftpd/">vsftpd</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Eclipse/">Eclipse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Landscape/">Landscape</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/">Selenium</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/WebDriver/">WebDriver</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/samba/">samba</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vsftpd/">vsftpd</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -690,7 +817,7 @@ hexo s
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/GitHub/" style="font-size: 10.00px;">GitHub</a><a href="/tags/Hexo/" style="font-size: 20.00px;">Hexo</a><a href="/tags/Landscape/" style="font-size: 10.00px;">Landscape</a><a href="/tags/blog/" style="font-size: 10.00px;">blog</a><a href="/tags/samba/" style="font-size: 10.00px;">samba</a><a href="/tags/vsftpd/" style="font-size: 10.00px;">vsftpd</a>
+      <a href="/tags/Eclipse/" style="font-size: 10.00px;">Eclipse</a><a href="/tags/GitHub/" style="font-size: 10.00px;">GitHub</a><a href="/tags/Hexo/" style="font-size: 20.00px;">Hexo</a><a href="/tags/Landscape/" style="font-size: 10.00px;">Landscape</a><a href="/tags/Selenium/" style="font-size: 10.00px;">Selenium</a><a href="/tags/WebDriver/" style="font-size: 10.00px;">WebDriver</a><a href="/tags/blog/" style="font-size: 10.00px;">blog</a><a href="/tags/samba/" style="font-size: 10.00px;">samba</a><a href="/tags/vsftpd/" style="font-size: 10.00px;">vsftpd</a>
     </div>
   </div>
 
@@ -699,7 +826,7 @@ hexo s
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -709,6 +836,10 @@ hexo s
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/03/18/learn-Selenium-WebDriver-Part-I/">Learn Selenium WebDriver Part I</a>
+          </li>
         
           <li>
             <a href="/2015/03/17/learn-Selenium-IDE/">learn Selenium IDE</a>
@@ -724,10 +855,6 @@ hexo s
         
           <li>
             <a href="/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/">Why do I set up this blog on GitHub using Hexo</a>
-          </li>
-        
-          <li>
-            <a href="/2015/02/16/hello-world/">Hello World</a>
           </li>
         
       </ul>
