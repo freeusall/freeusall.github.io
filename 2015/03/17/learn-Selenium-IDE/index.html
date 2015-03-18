@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: blog | Thought and Manifest</title>
+  <title>learn Selenium IDE | Thought and Manifest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Thought and Manifest">
-<meta property="og:url" content="http://yoursite.com/tags/blog/">
+  <meta name="description" content="This week I started to learn Selenium.The reason is that it is open source, and widely used.
+I decided to first go over the official tutorial.http://docs.seleniumhq.org/docs/(Note for readers in China">
+<meta property="og:type" content="article">
+<meta property="og:title" content="learn Selenium IDE">
+<meta property="og:url" content="http://yoursite.com/2015/03/17/learn-Selenium-IDE/">
 <meta property="og:site_name" content="Thought and Manifest">
-<meta property="og:description">
+<meta property="og:description" content="This week I started to learn Selenium.The reason is that it is open source, and widely used.
+I decided to first go over the official tutorial.http://docs.seleniumhq.org/docs/(Note for readers in China">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Thought and Manifest">
-<meta name="twitter:description">
+<meta name="twitter:title" content="learn Selenium IDE">
+<meta name="twitter:description" content="This week I started to learn Selenium.The reason is that it is open source, and widely used.
+I decided to first go over the official tutorial.http://docs.seleniumhq.org/docs/(Note for readers in China">
 
   
     <link rel="alternative" href="/atom.xml" title="Thought and Manifest" type="application/atom+xml">
@@ -61,18 +64,12 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Why-do-I-set-up-this-blog-on-GitHub-using-Hexo" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-learn-Selenium-IDE" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/" class="article-date">
-  <time datetime="2015-02-16T03:40:31.000Z" itemprop="datePublished">Feb 16 2015</time>
+    <a href="/2015/03/17/learn-Selenium-IDE/" class="article-date">
+  <time datetime="2015-03-17T09:04:52.000Z" itemprop="datePublished">Mar 17 2015</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/default/">default</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
@@ -80,8 +77,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/">Why do I set up this blog on GitHub using Hexo</a>
+    <h1 class="article-title" itemprop="name">
+      learn Selenium IDE
     </h1>
   
 
@@ -89,29 +86,96 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Yesterday, I realized that I should start to blog in English so as to become part of international software communities.</p>
-<p>Several years ago, I read somewhere that software engineer should keep blogging to improve technical competence.</p>
-<p>In the past few years, I have been blogged sporadically in Chinese on a national software engineer community. But the site proved unsafe after one big unpleasant incident.</p>
-<p>After that, I mostly kept solutions to daily technical problems locally.</p>
-<p>In retrospect, I think I should have shared the trials, errors, and successes that I have experienced during my past years as a software engineer publically.</p>
-<p>By sharing these bits, I can de-clutter my minds and maybe benefit myself and a few others along the way.</p>
+        <p>This week I started to learn Selenium.<br>The reason is that it is open source, and widely used.</p>
+<p>I decided to first go over the official tutorial.<br><a href="http://docs.seleniumhq.org/docs/" target="_blank" rel="external">http://docs.seleniumhq.org/docs/</a><br>(Note for readers in China: this site is outside the wall.)</p>
+<p>Today is about Selenium-IDE, a Firefox add-on that can produce web app test cases by recording user actions.</p>
+<p>Here is what I learned.</p>
+<h2 id="Selenium_Commands_Types">Selenium Commands Types</h2>
+<ul>
+<li>Action</li>
+<li>Accessor</li>
+<li>Assertion<br>—    assert (on failure stops)<br>—    verify (on failure contiues)<br>—    waitfor (on falure/timeout stops)</li>
+</ul>
+<h2 id="Selenium_Command_Components">Selenium Command Components</h2>
+<ul>
+<li>Command</li>
+<li>Target    (first parameter)</li>
+<li>Value        (second parameter)</li>
+</ul>
+<h2 id="Locator">Locator</h2>
+<ul>
+<li>By Identifier (By Id or By Name)</li>
+<li>By Id    (id=)</li>
+<li>By Name (name=)</li>
+<li>By XPath (//)</li>
+<li>By Link (link=)</li>
+<li>By Dom (dom=)</li>
+<li>By CSS (css=)</li>
+</ul>
+<h2 id="Matching_Text_Patterns">Matching Text Patterns</h2>
+<ul>
+<li><p>glob:<br><code>*</code><br><code>[]</code></p>
+</li>
+<li><p>regexp:</p>
+</li>
+<li><p>regexpi:</p>
+</li>
+<li><p>exact:</p>
+</li>
+</ul>
+<h2 id="Waiting">Waiting</h2>
+<ul>
+<li>AndWait (New page or Refresh)</li>
+<li>waitFor (AJAX, no page refresh, but certain element refresh)</li>
+</ul>
+<h2 id="Control_Flow_Methods">Control Flow Methods</h2>
+<ul>
+<li>Selenium-RC</li>
+<li>Javascript</li>
+<li>goto_sel_ide.js</li>
+</ul>
+<h2 id="Store">Store</h2>
+<ul>
+<li>Command</li>
+<li>Variable</li>
+<li>${}</li>
+</ul>
+<h2 id="Javascript_and_Selenese_Parameter">Javascript and Selenese Parameter</h2>
+<ul>
+<li><p>Command that takes Script Parameter<br>—        assertEval<br>—        verifyEval<br>—        storeEval<br>—        waitForEval</p>
+</li>
+<li><p>JavaScript Parameter<br>—        javascript {}</p>
+</li>
+</ul>
+<h2 id="echo_Command">echo Command</h2>
+<ul>
+<li>Text</li>
+<li>Variable</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/16/Why-do-I-set-up-this-blog-on-GitHub-using-Hexo/" data-id="oeayyvpattasqj6s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/03/17/learn-Selenium-IDE/" data-id="61lnbb2oitg8m88j" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blog/">blog</a></li></ul>
-
     </footer>
   </div>
   
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/03/11/vsftpd-with-samba/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">vsftpd with samba on debian</div>
+    </a>
+  
+</nav>
+
+  
 </article>
 
-
-  
-  
 </section>
         
           <aside id="sidebar">
